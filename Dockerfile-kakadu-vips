@@ -1,0 +1,72 @@
+FROM ubuntu:latest
+
+ARG KDU_VERSION=v8_3-02138L
+ARG KAKADU_ARCH=Linux-arm-64-gcc
+ARG RUBY=3.3.2
+
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends \
+    # For Kakadu VIPS
+    build-essential \
+    libvips \
+    libvips-tools \
+    libvips-dev \
+    libnuma-dev \
+    # For Ruby
+    autoconf \
+    patch \
+    rustc \
+    libssl-dev \
+    libyaml-dev \
+    libreadline6-dev \
+    zlib1g-dev \
+    libgmp-dev \
+    libncurses5-dev \
+    libffi-dev \
+    libgdbm6 \
+    libgdbm-dev \
+    libdb-dev \
+    uuid-dev \
+    # For rbenv
+    git \
+    ca-certificates \
+    curl
+
+# Install Ruby
+SHELL ["/bin/bash", "-c"]
+ADD https://github.com/rbenv/ruby-build/archive/refs/tags/v20240530.1.tar.gz /tmp/ruby-build.tar.gz
+WORKDIR /tmp
+RUN tar -xzf ruby-build.tar.gz
+RUN PREFIX=/usr/local ./ruby-build-*/install.sh
+RUN ruby-build ${RUBY} /opt/ruby
+ENV PATH="/opt/ruby/bin:$PATH"
+
+# # Install Kakadu
+SHELL ["/bin/sh", "-c"]
+ENV KAKADUVIPSHOME="/kakadu-vips"
+COPY kakadu ${KAKADUVIPSHOME}/kakadu/
+
+ENV KAKADUHOME="${KAKADUVIPSHOME}/kakadu/${KDU_VERSION}"
+
+RUN cd ${KAKADUHOME}/make && make -f Makefile-${KAKADU_ARCH} clean
+RUN cd ${KAKADUHOME}/coresys/make && make -f Makefile-${KAKADU_ARCH}
+RUN cd ${KAKADUHOME}/managed/make && make -f Makefile-${KAKADU_ARCH} all_but_jni
+RUN cd ${KAKADUHOME}/apps/make && make -f Makefile-${KAKADU_ARCH}
+
+ENV PATH="${KAKADUHOME}/bin/${KAKADU_ARCH}:$PATH"
+ENV LD_LIBRARY_PATH="${KAKADUHOME}/lib/${KAKADU_ARCH}:$LD_LIBRARY_PATH"
+
+
+# Install Kakadu VIPS
+COPY src ${KAKADUVIPSHOME}/src/
+COPY test/images/church.jp2 ${KAKADUVIPSHOME}/church.jp2
+
+RUN cd ${KAKADUVIPSHOME}/src && make && make install
+
+RUN useradd -m -s /bin/bash ruby
+USER ruby
+WORKDIR ${KAKADUVIPSHOME}
+
+# Build with: docker build . -t sul-dlss/kakadu-vips:latest
+# Build and run: docker run --rm -it $(docker build -q .)
+# Test with: vips kakaduload church.jp2 x.jpg
