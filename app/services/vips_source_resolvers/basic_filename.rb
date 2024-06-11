@@ -8,8 +8,9 @@ class VipsSourceResolvers
     end
 
     # @param [ImageRequest] image_request
-    def initialize(image_request:)
+    def initialize(image_request:, images_path: Settings.vips_source_resolvers.basic_filename.images_path)
       @identifier = image_request.identifier
+      @images_path = images_path
     end
 
     # @return [Vips::Source]
@@ -22,10 +23,10 @@ class VipsSourceResolvers
 
     private
 
-    attr_reader :identifier
+    attr_reader :identifier, :images_path
 
     def filepath
-      "#{Settings.vips_source_resolvers.basic_filename.images_path}/#{identifier}.jp2"
+      "#{images_path}/#{identifier}"
     end
   end
 end

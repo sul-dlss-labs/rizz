@@ -15,20 +15,20 @@ class ImageService
     @vips_source = vips_source
   end
 
-  # rubocop:disable Metrics/AbcSize
-  def call
+  def pipeline
     source_image = Vips::Image.new_from_source(vips_source, '')
     pipeline = ImageProcessing::Vips
                .source(source_image)
     pipeline = ImageServiceOperations::Crop.call(pipeline:, region: image_request.region, image: source_image)
     pipeline = ImageServiceOperations::Resize.call(pipeline:, size: image_request.size, image: source_image)
     pipeline = ImageServiceOperations::Rotation.call(pipeline:, rotation: image_request.rotation)
-    pipeline = ImageServiceOperations::Colorspace.call(pipeline:, quality: image_request.quality)
-    Rails.logger.info("Image: #{pipeline.inspect}")
+    ImageServiceOperations::Colorspace.call(pipeline:, quality: image_request.quality)
+  end
+
+  def call
     image = pipeline.call(save: false)
     VipsBufferWriter.call(image:, format: image_request.format)
   end
-  # rubocop:enable Metrics/AbcSize
 
   private
 
