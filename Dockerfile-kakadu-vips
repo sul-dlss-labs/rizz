@@ -64,6 +64,8 @@ COPY test/images/church.jp2 ${KAKADUVIPSHOME}/church.jp2
 RUN cd ${KAKADUVIPSHOME}/src && make && make install
 
 RUN useradd -m -s /bin/bash ruby
+RUN chown -R ruby:ruby /opt/ruby
+
 USER ruby
 WORKDIR ${KAKADUVIPSHOME}
 
