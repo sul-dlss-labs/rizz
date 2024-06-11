@@ -1,0 +1,3 @@
+vips_source_resolvers:
+  basic_filename:
+    images_path: images

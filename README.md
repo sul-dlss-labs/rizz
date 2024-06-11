@@ -71,9 +71,9 @@ Caveats:
 
 The application will now be running on `https://localhost:3000`. Note that you will need to accept the self-signed certificate.
 
-Example: https://localhost:3000/image-server/0380_796-44/full/max/0/default
+Example: https://localhost:3000/image-server/0380_796-44.jp2/full/max/0/default
 
 ### Image files
 JP2 image files can be placed in the `images` directory. They can be referenced by using their base filename as the identifier.
 
-For example, `https://localhost:3000/image-server/0380_796-44/full/max/0/default` serves `images/0380_796-44.jp2`.
+For example, `https://localhost:3000/image-server/0380_796-44.jp2/full/max/0/default` serves `images/0380_796-44.jp2`.

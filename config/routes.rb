@@ -8,5 +8,10 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   # root "images#show"
-  get 'image-server/:identifier/:region/:size/:rotation/:quality', defaults: { format: 'jpg' }, to: 'images#show'
+  ALLOW_DOTS = /[^\/]+/.freeze
+
+  get 'image-server/:identifier/:region/:size/:rotation/:quality',
+    defaults: { format: 'jpg' },
+    constraints: { identifier: ALLOW_DOTS },
+    to: 'images#show'
 end
