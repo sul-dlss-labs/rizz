@@ -30,7 +30,7 @@ RSpec.describe 'Request image' do
 
       expect(response).to have_http_status(:ok)
 
-      expect(ImageService).to have_received(:call) do |image_request:, _vips_source:|
+      expect(ImageService).to have_received(:call) do |image_request:, vips_source:| # rubocop:disable Lint/UnusedBlockArgument
         expect(image_request.format).to eq('png')
       end
     end
@@ -47,7 +47,7 @@ RSpec.describe 'Request image' do
 
       expect(response).to have_http_status(:ok)
 
-      expect(ImageService).to have_received(:call) do |image_request:, _vips_source:|
+      expect(ImageService).to have_received(:call) do |image_request:, vips_source:| # rubocop:disable Lint/UnusedBlockArgument
         expect(image_request.identifier).to eq('bc151bq1744:00_0001.jp2')
       end
     end
