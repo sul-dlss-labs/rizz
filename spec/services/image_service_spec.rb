@@ -16,6 +16,15 @@ RSpec.describe ImageService do
       expect(pipeline).to be_an_instance_of(ImageProcessing::Builder)
       expect(pipeline.options[:operations]).to eq([[:resize_to_fit, [400, 400, { size: :force }]]])
     end
+
+    context 'when not using kakadu loader' do
+      before do
+        allow(Settings.kakadu).to receive(:check_loader).and_return(true)
+      end
+      it 'raises' do
+        expect { pipeline }.to raise_error('Using OpenJPEG for JP2s, not Kakadu')
+      end
+    end
   end
 
   describe '.call' do

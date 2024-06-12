@@ -1,3 +1,6 @@
 vips_source_resolvers:
   basic_filename:
     images_path: images
+
+kakadu:
+  check_loader: false # Verifies that actually using Kakadu in vips.
