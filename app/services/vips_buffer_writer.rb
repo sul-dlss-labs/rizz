@@ -24,7 +24,7 @@ class VipsBufferWriter
   def writer_params
     case format
     when 'jpg'
-      '.jpg[Q=90]'
+      ".jpg[Q=#{Settings.vips.jpeg_quality}]"
     when 'png'
       '.png'
     when 'webp'

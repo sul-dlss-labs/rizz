@@ -4,3 +4,6 @@ vips_source_resolvers:
 
 kakadu:
   check_loader: true # Verifies that actually using Kakadu in vips.
+
+vips:
+  jpeg_quality: 90
