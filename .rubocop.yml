@@ -1,6 +1,8 @@
 require:
   - rubocop-rails
   - rubocop-performance
+  - rubocop-rspec
+  - rubocop-rspec_rails
 
 AllCops:
   TargetRubyVersion: 3.3
@@ -41,6 +43,15 @@ Naming/MethodParameterName:
     - y
 
 Rails/SkipsModelValidations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
   Enabled: false
 
 Style/Documentation:
@@ -407,4 +418,17 @@ Performance/StringIdentifierArgument: # new in 1.13
 Performance/StringInclude: # new in 1.7
   Enabled: true
 Performance/Sum: # new in 1.8
+  Enabled: true
+
+RSpecRails/AvoidSetupHook: # new in 2.4
+  Enabled: true
+RSpecRails/HaveHttpStatus: # new in 2.12
+  Enabled: true
+RSpecRails/InferredSpecType: # new in 2.14
+  Enabled: true
+RSpecRails/MinitestAssertions: # new in 2.17
+  Enabled: true
+RSpecRails/NegationBeValid: # new in 2.23
+  Enabled: true
+RSpecRails/TravelAround: # new in 2.19
   Enabled: true

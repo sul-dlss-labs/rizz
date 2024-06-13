@@ -21,6 +21,7 @@ RSpec.describe ImageService do
       before do
         allow(Settings.kakadu).to receive(:check_loader).and_return(true)
       end
+
       it 'raises' do
         expect { pipeline }.to raise_error('Using OpenJPEG for JP2s, not Kakadu')
       end
@@ -29,6 +30,7 @@ RSpec.describe ImageService do
 
   describe '.call' do
     subject(:image_response) { described_class.call(image_request:, filepath:) }
+
     let(:pipeline) { instance_double(ImageProcessing::Builder, call: vips_image) }
     let(:vips_image) { instance_double(Vips::Image, write_to_buffer: 'image') }
 
