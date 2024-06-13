@@ -2,6 +2,8 @@
 
 # Controller for image transformations.
 class ImagesController < ApplicationController
+  before_action :set_public_cache
+
   rescue_from VipsSourceResolvers::NotFoundError do
     render status: :not_found, plain: 'Not found'
   end

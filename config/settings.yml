@@ -7,3 +7,5 @@ kakadu:
 
 vips:
   jpeg_quality: 90
+
+public_cache: 24 # Cache-Control header, in hours. False to disable.

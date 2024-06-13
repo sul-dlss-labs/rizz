@@ -14,6 +14,7 @@ RSpec.describe 'Request image' do
       expect(response).to have_http_status(:ok)
       expect(response.body).to eq('image')
       expect(response.content_type).to eq('image/jpeg')
+      expect(response.headers['Cache-Control']).to eq('max-age=86400, public')
 
       expected_image_request = ImageRequest.new(identifier: 'bc151bq1744_00_0001.jp2', region: 'full', size: '400,400',
                                                 rotation: '0', quality: 'default', format: 'jpg')
@@ -58,6 +59,21 @@ RSpec.describe 'Request image' do
       get '/image-server/xbc151bq1744_00_0001.jp2/full/400,400/0/default'
 
       expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  context 'when public caching is disabled' do
+    before do
+      allow(Settings).to receive(:public_cache).and_return(false)
+    end
+
+    it 'sets the cache control header to prevent caching' do
+      get '/image-server/bc151bq1744_00_0001.jp2/full/400,400/0/default'
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to eq('image')
+      expect(response.content_type).to eq('image/jpeg')
+      expect(response.headers['Cache-Control']).to eq('max-age=0, private, must-revalidate')
     end
   end
 end
