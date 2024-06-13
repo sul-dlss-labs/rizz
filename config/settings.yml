@@ -9,3 +9,7 @@ vips:
   jpeg_quality: 90
 
 public_cache: 24 # Cache-Control header, in hours. False to disable.
+
+file_cache:
+  path: ~ # Defaults to tmp/file-cache
+  enabled: true

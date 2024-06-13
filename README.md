@@ -50,9 +50,11 @@ This is a proof-of-concept IIIF image server.
 ### Image information
 Not yet supported.
 
+### Caching
+- [x] file based caching
+- [ ] cache pruning (operation that keeps cache below a max size by deleting least recently used)
+
 ## Caveats
-* No tests yet.
-* No caching.
 * I haven't fully read the IIIF Image API spec.
 
 ## Development

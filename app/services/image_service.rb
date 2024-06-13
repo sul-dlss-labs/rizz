@@ -10,9 +10,9 @@ class ImageService
     new(...).call
   end
 
-  def initialize(image_request:, vips_source:)
+  def initialize(image_request:, filepath:)
     @image_request = image_request
-    @vips_source = vips_source
+    @filepath = filepath
   end
 
   def pipeline
@@ -31,10 +31,10 @@ class ImageService
 
   private
 
-  attr_reader :image_request, :vips_source, :image
+  attr_reader :image_request, :filepath, :image
 
   def source_image
-    @source_image ||= Vips::Image.new_from_source(vips_source, '').tap do |image|
+    @source_image ||= Vips::Image.new_from_source(Vips::Source.new_from_file(filepath), '').tap do |image|
       if image.get('vips-loader') == 'jp2kload_source' && Settings.kakadu.check_loader
         raise 'Using OpenJPEG for JP2s, not Kakadu'
       end

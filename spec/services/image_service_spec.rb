@@ -7,10 +7,10 @@ RSpec.describe ImageService do
     ImageRequest.new(identifier: 'bc151bq1744_00_0001.jp2', region: 'full', size: '400,400', rotation: '0',
                      quality: 'default', format: 'jpg')
   end
-  let(:vips_source) { Vips::Source.new_from_file('images/bc151bq1744_00_0001.jp2') }
+  let(:filepath) { 'images/bc151bq1744_00_0001.jp2' }
 
   describe '.pipeline' do
-    subject(:pipeline) { described_class.new(image_request:, vips_source:).pipeline }
+    subject(:pipeline) { described_class.new(image_request:, filepath:).pipeline }
 
     it 'returns a pipeline' do
       expect(pipeline).to be_an_instance_of(ImageProcessing::Builder)
@@ -28,7 +28,7 @@ RSpec.describe ImageService do
   end
 
   describe '.call' do
-    subject(:image_response) { described_class.call(image_request:, vips_source:) }
+    subject(:image_response) { described_class.call(image_request:, filepath:) }
     let(:pipeline) { instance_double(ImageProcessing::Builder, call: vips_image) }
     let(:vips_image) { instance_double(Vips::Image, write_to_buffer: 'image') }
 

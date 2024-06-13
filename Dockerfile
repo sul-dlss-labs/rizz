@@ -1,9 +1,5 @@
 FROM sul-dlss/kakadu-vips:latest
 
-
-COPY images/ /images/
-
-
 USER ruby
 WORKDIR /tmp
 COPY Gemfile .

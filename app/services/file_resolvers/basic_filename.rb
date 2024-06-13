@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class VipsSourceResolvers
-  # Loads an image from a file on disk using the identifier as the filename.
+class FileResolvers
+  # Resolves a file using the identifier as the filename.
   class BasicFilename
     def self.resolve(...)
       new(...).resolve
@@ -13,12 +13,12 @@ class VipsSourceResolvers
       @images_path = images_path
     end
 
-    # @return [Vips::Source]
+    # @return [String] file path
     def resolve
-      Rails.logger.info("Resolving Vips source: #{filepath}")
-      raise VipsSourceResolvers::NotFoundError unless File.exist?(filepath)
+      Rails.logger.info("Resolving file: #{filepath}")
+      raise FileResolvers::NotFoundError unless File.exist?(filepath)
 
-      Vips::Source.new_from_file(filepath)
+      filepath
     end
 
     private
@@ -26,7 +26,7 @@ class VipsSourceResolvers
     attr_reader :identifier, :images_path
 
     def filepath
-      "#{images_path}/#{identifier}"
+      @filepath ||= "#{images_path}/#{identifier}"
     end
   end
 end
