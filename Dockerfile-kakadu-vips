@@ -2,7 +2,7 @@ FROM ubuntu:latest
 
 ARG KDU_VERSION=v8_3-02138L
 ARG KAKADU_ARCH=Linux-arm-64-gcc
-ARG RUBY=3.3.2
+ARG RUBY=3.3.1
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
