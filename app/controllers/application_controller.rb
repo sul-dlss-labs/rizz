@@ -13,4 +13,8 @@ class ApplicationController < ActionController::Base
 
     expires_in Settings.public_cache.hours.to_i, public: true
   end
+
+  def cache
+    @cache ||= FileCache.new
+  end
 end

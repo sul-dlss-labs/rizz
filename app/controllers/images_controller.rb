@@ -29,10 +29,6 @@ class ImagesController < ApplicationController
     params.permit(:identifier, :region, :size, :rotation, :quality, :format)
   end
 
-  def cache
-    @cache ||= FileCache.new
-  end
-
   def image_request
     @image_request ||= ImageRequest.new(image_params)
   end

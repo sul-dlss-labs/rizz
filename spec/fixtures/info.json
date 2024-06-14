@@ -1,0 +1,47 @@
+{
+    "@context": "http://iiif.io/api/image/3/context.json",
+    "id": "https://localhost:3000/image-server/0380_796-44.jp2/info",
+    "type": "ImageService3",
+    "protocol": "http://iiif.io/api/image",
+    "profile": "level0",
+    "width": 5426,
+    "height": 3820,
+    "sizes": [
+      {
+        "width": 169,
+        "height": 119
+      },
+      {
+        "width": 339,
+        "height": 238
+      },
+      {
+        "width": 678,
+        "height": 477
+      },
+      {
+        "width": 1356,
+        "height": 955
+      },
+      {
+        "width": 2713,
+        "height": 1910
+      },
+      {
+        "width": 5426,
+        "height": 3820
+      }
+    ],
+    "tiles": {
+      "width": 1024,
+      "height": 1024,
+      "scaleFactors": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ]
+    }
+  }
