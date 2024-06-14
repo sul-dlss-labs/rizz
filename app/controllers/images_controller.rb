@@ -2,12 +2,6 @@
 
 # Controller for image transformations.
 class ImagesController < ApplicationController
-  before_action :set_public_cache
-
-  rescue_from FileResolvers::NotFoundError do
-    render status: :not_found, plain: 'Not found'
-  end
-
   rescue_from ImageService::InvalidRequestError do |e|
     render status: :bad_request, plain: e.message || 'Invalid request'
   end
@@ -18,7 +12,7 @@ class ImagesController < ApplicationController
 
   # rubocop:disable Metrics/AbcSize
   def show
-    filepath = FileResolvers::BasicFilename.resolve(image_request:)
+    filepath = FileResolvers::BasicFilename.resolve(identifier: image_request.identifier)
     if (cache_filepath = cache.find(request:, updated_at: File.mtime(filepath)))
       return send_file cache_filepath, type: request.format, disposition: 'inline'
     end

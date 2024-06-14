@@ -41,6 +41,7 @@ Naming/MethodParameterName:
   AllowedNames:
     - x
     - y
+    - id
 
 Rails/SkipsModelValidations:
   Enabled: false

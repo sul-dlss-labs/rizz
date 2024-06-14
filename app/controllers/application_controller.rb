@@ -2,6 +2,12 @@
 
 # Base controller for the application.
 class ApplicationController < ActionController::Base
+  before_action :set_public_cache
+
+  rescue_from FileResolvers::NotFoundError do
+    render status: :not_found, plain: 'Not found'
+  end
+
   def set_public_cache
     return unless Settings.public_cache
 

@@ -14,4 +14,8 @@ Rails.application.routes.draw do
     defaults: { format: 'jpg' },
     constraints: { identifier: ALLOW_DOTS },
     to: 'images#show'
+
+    get 'image-server/:identifier/info.json',
+    constraints: { identifier: ALLOW_DOTS },
+    to: 'info#show'
 end

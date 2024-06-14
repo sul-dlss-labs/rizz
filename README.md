@@ -48,11 +48,16 @@ This is a proof-of-concept IIIF image server.
 - [x] webp
 
 ### Image information
-Not yet supported.
+- [x] required info
+- [?] sizes
+- [?] tiles
 
 ### Caching
 - [x] file based caching
 - [ ] cache pruning (operation that keeps cache below a max size by deleting least recently used)
+
+### Other
+- [ ] CORS headers
 
 ## Caveats
 * I haven't fully read the IIIF Image API spec.

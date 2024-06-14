@@ -13,3 +13,10 @@ public_cache: 24 # Cache-Control header, in hours. False to disable.
 file_cache:
   path: ~ # Defaults to tmp/file-cache
   enabled: true
+
+iiif:
+  profile_level: level0
+  # See https://cantaloupe-project.github.io/manual/5.0/endpoints.html#IIIFImageAPI3
+  min_size: 64 # Minimum size that will be used in info.json `sizes` keys.
+  min_tile_size: 1024 # Minimum size that will be used in info.json `tiles` keys.
+  

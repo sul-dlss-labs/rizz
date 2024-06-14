@@ -7,9 +7,9 @@ class FileResolvers
       new(...).resolve
     end
 
-    # @param [ImageRequest] image_request
-    def initialize(image_request:, images_path: Settings.vips_source_resolvers.basic_filename.images_path)
-      @identifier = image_request.identifier
+    # @param [String] identifier
+    def initialize(identifier:, images_path: Settings.vips_source_resolvers.basic_filename.images_path)
+      @identifier = identifier
       @images_path = images_path
     end
 
