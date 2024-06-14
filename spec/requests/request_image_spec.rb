@@ -61,6 +61,23 @@ RSpec.describe 'Request image' do
     end
   end
 
+  context 'when the identifier has a slash' do
+    before do
+      allow(FileResolvers::BasicFilename).to receive(:resolve)
+        .and_return('images/bc151bq1744_00_0001.jp2')
+    end
+
+    it 'allows the colon' do
+      get '/image-server/bc151bq1744/00_0001.jp2/full/400,400/0/default.png'
+
+      expect(response).to have_http_status(:ok)
+
+      expect(ImageService).to have_received(:call) do |image_request:, filepath:| # rubocop:disable Lint/UnusedBlockArgument
+        expect(image_request.identifier).to eq('bc151bq1744/00_0001.jp2')
+      end
+    end
+  end
+
   context 'when the image is missing' do
     it 'returns a 404' do
       get '/image-server/xbc151bq1744_00_0001.jp2/full/400,400/0/default'

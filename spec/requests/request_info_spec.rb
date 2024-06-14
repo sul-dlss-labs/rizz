@@ -20,7 +20,7 @@ RSpec.describe 'Request image' do
       get '/image-server/bc151bq1744_00_0001.jp2/info.json'
 
       expect(response).to have_http_status(:ok)
-      expect(response.parsed_body).to match(expected_info)
+      expect(JSON.parse(response.body)).to match(expected_info) # rubocop:disable Rails/ResponseParsedBody
       expect(response.content_type).to eq('application/ld+json; profile="http://iiif.io/api/image/3/context.json"; ' \
                                           'charset=utf-8')
       expect(response.headers['Cache-Control']).to eq('max-age=86400, public')
