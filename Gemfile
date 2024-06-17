@@ -14,13 +14,13 @@ gem 'propshaft'
 gem 'sqlite3', '~> 1.4'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem 'importmap-rails'
+# gem 'importmap-rails'
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem 'turbo-rails'
+# gem 'turbo-rails'
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
-gem 'stimulus-rails'
+# gem 'stimulus-rails'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
@@ -68,4 +68,10 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   # gem 'capybara'
   # gem 'selenium-webdriver'
+end
+
+group :deployment do
+  gem 'capistrano-passenger', require: false
+  gem 'capistrano-rails', require: false
+  gem 'dlss-capistrano', require: false
 end
