@@ -44,7 +44,7 @@ This is a proof-of-concept IIIF image server.
 - [x] png
 - [x] gif
 - [x] jp2
-- [ ] pdf
+- [x] pdf
 - [x] webp
 
 ### Image information

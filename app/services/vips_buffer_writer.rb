@@ -14,7 +14,7 @@ class VipsBufferWriter
 
   # @return [ImageResponse]
   def call
-    buffer = image.write_to_buffer(writer_params)
+    buffer = pdf? ? pdf_buffer : image.write_to_buffer(writer_params)
     ImageResponse.new(buffer:, mime_type:)
   end
 
@@ -43,5 +43,15 @@ class VipsBufferWriter
 
   def mime_type
     Rack::Mime::MIME_TYPES[".#{format}"]
+  end
+
+  def pdf?
+    format == 'pdf'
+  end
+
+  def pdf_buffer
+    # Write via image magick. This is not likely to be awesome.
+    # Note that writing to PDF must be enabled in /etc/ImageMagick-?/policy.xml.
+    image.magicksave_buffer(format: 'PDF')
   end
 end
