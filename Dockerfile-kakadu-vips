@@ -3,14 +3,37 @@ FROM ubuntu:latest
 ARG KDU_VERSION=v8_3-02138L
 ARG KAKADU_ARCH=Linux-arm-64-gcc
 ARG RUBY=3.3.1
+ARG VIPS_VERSION=8.15.2
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
-    # For Kakadu VIPS
+    # For VIPS
     build-essential \
-    libvips \
-    libvips-tools \
-    libvips-dev \
+    libnuma-dev \
+    meson \
+    ninja-build \
+    libjpeg-turbo8-dev \
+    libexif-dev \
+    librsvg2-dev \
+    libpoppler-glib-dev \
+    libarchive-dev \
+    libtiff-dev \
+    libfftw3-dev \
+    liblcms2-dev \
+    libpng-dev \
+    libimagequant-dev \
+    libmagickcore-dev \
+    libmagickwand-dev \
+    libpango1.0-dev \
+    libmatio-dev \
+    libcfitsio-dev \
+    libwebp-dev \
+    libopenslide-dev \
+    libheif-dev \
+    libcgif-dev \
+    liborc-0.4-dev \
+    curl \
+    # For Kakadu VIPS
     libnuma-dev \
     # For Ruby
     autoconf \
@@ -27,10 +50,10 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     libgdbm-dev \
     libdb-dev \
     uuid-dev \
-    # For rbenv
-    git \
-    ca-certificates \
-    curl
+    ca-certificates
+
+# Allow ImageMagick to write PDFs
+RUN sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<!-- <policy domain="coder" rights="none" pattern="PDF" \/> -->/' /etc/ImageMagick-6/policy.xml
 
 # Install Ruby
 SHELL ["/bin/bash", "-c"]
@@ -41,12 +64,27 @@ RUN PREFIX=/usr/local ./ruby-build-*/install.sh
 RUN ruby-build ${RUBY} /opt/ruby
 ENV PATH="/opt/ruby/bin:$PATH"
 
-# # Install Kakadu
+# Install VIPS
 SHELL ["/bin/sh", "-c"]
-ENV KAKADUVIPSHOME="/kakadu-vips"
-COPY kakadu ${KAKADUVIPSHOME}/kakadu/
+ENV VIPSSRCHOME="/usr/local/src/vips"
+RUN mkdir -p ${VIPSSRCHOME}
+WORKDIR ${VIPSSRCHOME}
+RUN curl -L https://github.com/libvips/libvips/releases/download/v${VIPS_VERSION}/vips-${VIPS_VERSION}.tar.xz --output vips-${VIPS_VERSION}.tar.xz
+RUN tar -xf vips-${VIPS_VERSION}.tar.xz
+ENV VIPSVERSIONHOME="${VIPSSRCHOME}/vips-${VIPS_VERSION}"
+RUN cd ${VIPSVERSIONHOME} && meson setup build  --buildtype=release -Dopenjpeg=disabled
+WORKDIR ${VIPSVERSIONHOME}/build
+RUN meson compile
+RUN meson test
+RUN meson install
 
-ENV KAKADUHOME="${KAKADUVIPSHOME}/kakadu/${KDU_VERSION}"
+ENV LD_LIBRARY_PATH="/usr/local/lib/aarch64-linux-gnu:${LD_LIBRARY_PATH}"
+
+# Install Kakadu
+ENV KAKADUVIPSSRCHOME="/usr/local/src/kakadu-vips"
+COPY kakadu ${KAKADUVIPSSRCHOME}/kakadu/
+
+ENV KAKADUHOME="${KAKADUVIPSSRCHOME}/kakadu/${KDU_VERSION}"
 
 RUN cd ${KAKADUHOME}/make && make -f Makefile-${KAKADU_ARCH} clean
 RUN cd ${KAKADUHOME}/coresys/make && make -f Makefile-${KAKADU_ARCH}
@@ -56,18 +94,17 @@ RUN cd ${KAKADUHOME}/apps/make && make -f Makefile-${KAKADU_ARCH}
 ENV PATH="${KAKADUHOME}/bin/${KAKADU_ARCH}:$PATH"
 ENV LD_LIBRARY_PATH="${KAKADUHOME}/lib/${KAKADU_ARCH}:$LD_LIBRARY_PATH"
 
-
 # Install Kakadu VIPS
-COPY src ${KAKADUVIPSHOME}/src/
-COPY test/images/church.jp2 ${KAKADUVIPSHOME}/church.jp2
+COPY src ${KAKADUVIPSSRCHOME}/src/
+COPY test/images/church.jp2 ${KAKADUVIPSSRCHOME}/church.jp2
 
-RUN cd ${KAKADUVIPSHOME}/src && make && make install
+RUN cd ${KAKADUVIPSSRCHOME}/src && make && make install
 
 RUN useradd -m -s /bin/bash ruby
 RUN chown -R ruby:ruby /opt/ruby
 
 USER ruby
-WORKDIR ${KAKADUVIPSHOME}
+WORKDIR ${KAKADUVIPSSRCHOME}
 
 # Build with: docker build . -t sul-dlss/kakadu-vips:latest
 # Build and run: docker run --rm -it $(docker build -q .)
