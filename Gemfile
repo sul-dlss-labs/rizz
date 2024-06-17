@@ -38,8 +38,8 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 gem 'bootsnap', require: false
 
 gem 'config'
-gem 'falcon'
 gem 'image_processing'
+gem 'puma'
 gem 'vips'
 
 group :development, :test do

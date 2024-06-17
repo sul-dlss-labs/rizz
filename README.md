@@ -74,13 +74,13 @@ Caveats:
 4. Build the image with `docker build . -t sul-dlss/kakadu-vips:latest`. You may need to provide additional build arguments for your architecture and Kakadu version. See the dockerfile.
 
 ### Running the development server
-`docker run -v $(pwd):/rizz -p 3000:3000 -it $(docker build -q .)`
+`docker run --rm -v $(pwd):/rizz -p 3000:3000 -it $(docker build -q .)`
 
-The application will now be running on `https://localhost:3000`. Note that you will need to accept the self-signed certificate.
+The application will now be running on `https://localhost:3000`.
 
-Example: https://localhost:3000/image-server/0380_796-44.jp2/full/max/0/default
+Example: http://localhost:3000/image-server/0380_796-44.jp2/full/max/0/default
 
 ### Image files
 JP2 image files can be placed in the `images` directory. They can be referenced by using their base filename as the identifier.
 
-For example, `https://localhost:3000/image-server/0380_796-44.jp2/full/max/0/default` serves `images/0380_796-44.jp2`.
+For example, `http://localhost:3000/image-server/0380_796-44.jp2/full/max/0/default` serves `images/0380_796-44.jp2`.

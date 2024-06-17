@@ -7,4 +7,4 @@ COPY Gemfile .
 RUN bundle install
 
 WORKDIR /rizz
-CMD bundle install && bundle exec falcon serve --bind https://0.0.0.0:3000
+CMD bundle install && bundle exec bin/puma -C config/puma.rb config.ru
