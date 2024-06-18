@@ -7,9 +7,9 @@ module ImageServiceOperations
       new(...).call
     end
 
-    def initialize(pipeline:, size:, image:)
+    def initialize(pipeline:, image_request:, image:)
       @pipeline = pipeline
-      @size = size
+      @image_request = image_request
       @image = image
     end
 
@@ -31,7 +31,8 @@ module ImageServiceOperations
       when /^\^,(\d+)$/
         pipeline.resize_to_fit(nil, ::Regexp.last_match(1).to_i)
       when /^(\d+),(\d+)$/
-        pipeline.resize_to_fit(::Regexp.last_match(1).to_i, ::Regexp.last_match(2).to_i, size: :force)
+        pipeline.resize_to_fit([::Regexp.last_match(1).to_i, crop_width].min,
+                               [::Regexp.last_match(2).to_i, crop_height].min, size: :force)
       else
         raise ImageService::InvalidRequestError, "Invalid size: #{size}"
       end
@@ -42,6 +43,8 @@ module ImageServiceOperations
 
     private
 
-    attr_reader :size, :pipeline, :image
+    attr_reader :image_request, :pipeline, :image
+
+    delegate :size, :crop_height, :crop_width, to: :image_request
   end
 end

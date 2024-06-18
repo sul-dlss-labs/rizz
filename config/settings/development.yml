@@ -4,3 +4,7 @@ vips_source_resolvers:
 
 kakadu:
   check_loader: false
+
+
+file_cache:
+  enabled: false

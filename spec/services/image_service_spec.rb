@@ -50,8 +50,8 @@ RSpec.describe ImageService do
       expect(ImageProcessing::Vips).to have_received(:source).with(Vips::Image)
       expect(ImageServiceOperations::Crop).to have_received(:call)
         .with(pipeline:,
-              region: image_request.region, image: Vips::Image)
-      expect(ImageServiceOperations::Resize).to have_received(:call).with(pipeline:, size: image_request.size,
+              image_request:, image: Vips::Image)
+      expect(ImageServiceOperations::Resize).to have_received(:call).with(pipeline:, image_request:,
                                                                           image: Vips::Image)
       expect(ImageServiceOperations::Rotation).to have_received(:call).with(pipeline:,
                                                                             rotation: image_request.rotation)

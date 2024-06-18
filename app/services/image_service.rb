@@ -18,8 +18,8 @@ class ImageService
   def pipeline
     pipeline = ImageProcessing::Vips
                .source(source_image)
-    pipeline = ImageServiceOperations::Crop.call(pipeline:, region: image_request.region, image: source_image)
-    pipeline = ImageServiceOperations::Resize.call(pipeline:, size: image_request.size, image: source_image)
+    pipeline = ImageServiceOperations::Crop.call(pipeline:, image_request:, image: source_image)
+    pipeline = ImageServiceOperations::Resize.call(pipeline:, image_request:, image: source_image)
     pipeline = ImageServiceOperations::Rotation.call(pipeline:, rotation: image_request.rotation)
     ImageServiceOperations::Colorspace.call(pipeline:, quality: image_request.quality)
   end
