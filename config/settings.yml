@@ -11,7 +11,7 @@ vips:
 public_cache: 24 # Cache-Control header, in hours. False to disable.
 
 file_cache:
-  path: ~ # Defaults to tmp/file-cache
+  path: tmp/file-cache
   enabled: true
 
 iiif:

@@ -4,7 +4,6 @@
 This is a proof-of-concept IIIF image server.
 
 * Using Kakadu via Libvips for JP2 support.
-* Uses Falcon as web server.
 
 ## Supported features
 ### Image requests
@@ -76,7 +75,7 @@ Caveats:
 ### Running the development server
 `docker run --rm -v $(pwd):/rizz -p 3000:3000 -it $(docker build -q .)`
 
-The application will now be running on `https://localhost:3000`.
+The application will now be running on `http://localhost:3000`.
 
 Example: http://localhost:3000/image-server/0380_796-44.jp2/full/max/0/default
 

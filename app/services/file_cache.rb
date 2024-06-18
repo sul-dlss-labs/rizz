@@ -4,7 +4,7 @@
 # Files are stored in a directory structure that mirrors the request path.
 # If updated_at is provided, the cache is self-expiring and will not return stale files.
 class FileCache
-  def initialize(cache_path: Settings.file_cache.path || Rails.root.join('tmp/file_cache'))
+  def initialize(cache_path: Settings.file_cache.path)
     @cache_path = cache_path
     @@file_extensions ||= Rack::Mime::MIME_TYPES.invert # rubocop:disable Style/ClassVars
   end

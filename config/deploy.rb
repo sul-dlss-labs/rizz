@@ -52,3 +52,15 @@ set :assets_manifests, lambda {
 
 # update shared_configs before restarting app
 # before 'deploy:restart', 'shared_configs:update'
+
+# For now, clearing cache on deploy
+task :clear_cache do
+  on roles(:app) do
+    within current_path do
+      with rails_env: fetch(:rails_env) do
+        rake 'cache:clear'
+      end
+    end
+  end
+end
+after 'deploy:published', 'clear_cache'
