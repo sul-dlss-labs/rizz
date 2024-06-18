@@ -15,7 +15,7 @@ file_cache:
   enabled: true
 
 iiif:
-  profile_level: level0
+  profile_level: level2
   # See https://cantaloupe-project.github.io/manual/5.0/endpoints.html#IIIFImageAPI3
   min_size: 64 # Minimum size that will be used in info.json `sizes` keys.
   min_tile_size: 1024 # Minimum size that will be used in info.json `tiles` keys.

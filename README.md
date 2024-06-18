@@ -20,12 +20,12 @@ This is a proof-of-concept IIIF image server.
 - [x] ^w,
 - [x] ,h
 - [x] ^,h
-- [ ] pct:n
-- [ ] ^pct:n
+- [x] pct:n
+- [x] ^pct:n
 - [x] w,h
 - [x] ^w,h
-- [ ] !w,h
-- [ ] ^!w,h
+- [x] !w,h
+- [x] ^!w,h
 
 #### Rotation
 - [x] n
@@ -56,10 +56,7 @@ This is a proof-of-concept IIIF image server.
 - [ ] cache pruning (operation that keeps cache below a max size by deleting least recently used)
 
 ### Other
-- [ ] CORS headers
-
-## Caveats
-* I haven't fully read the IIIF Image API spec.
+- [x] CORS headers
 
 ## Development
 ### Building the Kakadu VIPS docker image
@@ -80,6 +77,6 @@ The application will now be running on `http://localhost:3000`.
 Example: http://localhost:3000/image-server/0380_796-44.jp2/full/max/0/default
 
 ### Image files
-JP2 image files can be placed in the `images` directory. They can be referenced by using their base filename as the identifier.
+Image files can be placed in the `images` directory. They can be referenced by using their filename as the identifier.
 
 For example, `http://localhost:3000/image-server/0380_796-44.jp2/full/max/0/default` serves `images/0380_796-44.jp2`.
