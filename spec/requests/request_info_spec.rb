@@ -28,6 +28,7 @@ RSpec.describe 'Request image' do
       expect(response.content_type).to eq('application/ld+json; profile="http://iiif.io/api/image/3/context.json"; ' \
                                           'charset=utf-8')
       expect(response.headers['Cache-Control']).to eq('max-age=86400, public')
+      expect(response.headers['Link']).to eq('http://iiif.io/api/image/3/level2.json>;rel="profile"')
 
       expect(InfoBuilder).to have_received(:call).with(filepath: 'images/bc151bq1744_00_0001.jp2', id: 'http://www.example.com/image-server/bc151bq1744_00_0001.jp2')
       expect(file_cache).to have_received(:find).with(request: ActionDispatch::Request,

@@ -18,6 +18,7 @@ RSpec.describe 'Request image' do
       expect(response.body).to eq('image')
       expect(response.content_type).to eq('image/jpeg')
       expect(response.headers['Cache-Control']).to eq('max-age=86400, public')
+      expect(response.headers['Link']).to eq('http://iiif.io/api/image/3/level2.json>;rel="profile"')
 
       expected_image_request = ImageRequest.new(identifier: 'bc151bq1744_00_0001.jp2', region: 'full', size: '400,400',
                                                 rotation: '0', quality: 'default', format: 'jpg')
