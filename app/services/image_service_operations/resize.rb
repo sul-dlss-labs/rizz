@@ -23,16 +23,25 @@ module ImageServiceOperations
       when '^max'
         pipeline.resize_to_fit(image.width, image.height)
       when /^(\d+),$/
-        pipeline.resize_to_limit(::Regexp.last_match(1).to_i, nil)
+        width = ::Regexp.last_match(1).to_i
+        check_dimension(width, crop_width)
+        pipeline.resize_to_limit(width, nil)
       when /^\^(\d+),$/
-        pipeline.resize_to_fit(::Regexp.last_match(1).to_i, nil)
+        width = ::Regexp.last_match(1).to_i
+        pipeline.resize_to_fit(width, nil)
       when /^,(\d+)$/
-        pipeline.resize_to_limit(nil, ::Regexp.last_match(1).to_i)
+        height = ::Regexp.last_match(1).to_i
+        check_dimension(height, crop_height)
+        pipeline.resize_to_limit(nil, height)
       when /^\^,(\d+)$/
-        pipeline.resize_to_fit(nil, ::Regexp.last_match(1).to_i)
+        height = ::Regexp.last_match(1).to_i
+        pipeline.resize_to_fit(nil, height)
       when /^(\d+),(\d+)$/
-        pipeline.resize_to_fit([::Regexp.last_match(1).to_i, crop_width].min,
-                               [::Regexp.last_match(2).to_i, crop_height].min, size: :force)
+        width = ::Regexp.last_match(1).to_i
+        check_dimension(width, crop_width)
+        height = ::Regexp.last_match(2).to_i
+        check_dimension(height, crop_height)
+        pipeline.resize_to_fit(width, height, size: :force)
       else
         raise ImageService::InvalidRequestError, "Invalid size: #{size}"
       end
@@ -46,5 +55,9 @@ module ImageServiceOperations
     attr_reader :image_request, :pipeline, :image
 
     delegate :size, :crop_height, :crop_width, to: :image_request
+
+    def check_dimension(dimension, max)
+      raise ImageService::InvalidRequestError, 'Invalid size' if dimension > max
+    end
   end
 end
