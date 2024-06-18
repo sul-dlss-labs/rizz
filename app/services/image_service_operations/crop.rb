@@ -38,7 +38,7 @@ module ImageServiceOperations
     # rubocop:disable Metrics/AbcSize
     def square_crop
       if image.width == image.height
-        nil
+        pipeline
       elsif image.width > image.height
         pipeline.crop((image.width - image.height) / 2, 0, image.height, image.height)
       else

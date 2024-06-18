@@ -26,10 +26,7 @@ class ImageService
 
   def call
     image = pipeline.call(save: false)
-    Rails.logger.info("Processing image: #{image_request.format}")
-    x = VipsBufferWriter.call(image:, format: image_request.format)
-    Rails.logger.info("Processed image: #{image_request.format}")
-    x
+    VipsBufferWriter.call(image:, format: image_request.format)
   end
 
   private
