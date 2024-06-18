@@ -15,7 +15,11 @@ Rails.application.routes.draw do
     constraints: { identifier: ALLOW_ALL },
     to: 'images#show'
 
-    get 'image-server/:identifier/info.json',
+  get 'image-server/:identifier/info.json',
     constraints: { identifier: ALLOW_ALL },
     to: 'info#show'
+
+  get 'image-server/:identifier',
+    constraints: { identifier: ALLOW_ALL },
+    to: redirect('image-server/%{identifier}/info.json', status: 303)
 end

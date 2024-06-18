@@ -66,4 +66,13 @@ RSpec.describe 'Request image' do
       expect(file_cache).not_to have_received(:write)
     end
   end
+
+  context 'when info.json is omitted' do
+    it 'redirects' do
+      get '/image-server/bc151bq1744_00_0001.jp2'
+
+      expect(response).to have_http_status(:redirect)
+      expect(response.headers['location']).to eq('http://www.example.com/image-server/bc151bq1744_00_0001.jp2/info.json')
+    end
+  end
 end
