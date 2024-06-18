@@ -40,6 +40,7 @@ gem 'bootsnap', require: false
 gem 'config'
 gem 'image_processing'
 gem 'puma'
+gem 'rack-cors'
 gem 'vips'
 
 group :development, :test do
