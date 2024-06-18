@@ -29,7 +29,7 @@ RSpec.describe 'Request image' do
                                           'charset=utf-8')
       expect(response.headers['Cache-Control']).to eq('max-age=86400, public')
 
-      expect(InfoBuilder).to have_received(:call).with(filepath: 'images/bc151bq1744_00_0001.jp2', id: 'http://www.example.com/image-server/bc151bq1744_00_0001.jp2/info')
+      expect(InfoBuilder).to have_received(:call).with(filepath: 'images/bc151bq1744_00_0001.jp2', id: 'http://www.example.com/image-server/bc151bq1744_00_0001.jp2')
       expect(file_cache).to have_received(:find).with(request: ActionDispatch::Request,
                                                       updated_at: File.mtime('images/bc151bq1744_00_0001.jp2'))
       expect(file_cache).to have_received(:write).with(request: ActionDispatch::Request, body: expected_info.to_json)
