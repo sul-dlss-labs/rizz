@@ -1,0 +1,84 @@
+#!/usr/bin/env ruby
+
+# require_relative '../config/environment'
+
+require 'faraday'
+require 'fileutils'
+require 'benchmark'
+
+TestCase = Struct.new('TestCase', :image, :path)
+
+test_cases = [
+  # Created from https://purl.stanford.edu/hg676jb4964
+  TestCase.new('0380_796-44.jp2', 'info.json'),
+  TestCase.new('0380_796-44.jp2', 'full/679,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '0,0,4096,3820/1024,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '4096,0,1330,3820/333,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '2048,0,2048,2048/1024,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '2048,2048,2048,1772/1024,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '0,0,2048,2048/1024,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '0,2048,2048,1772/1024,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '4096,0,1330,2048/665,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '4096,2048,1330,1772/665,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '2048,1024,1024,1024/1024,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '2048,2048,1024,1024/1024,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '3072,1024,1024,1024/1024,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '3072,2048,1024,1024/1024,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '1024,1024,1024,1024/1024,/0/default.jpg'),
+  TestCase.new('0380_796-44.jp2', '1024,2048,1024,1024/1024,/0/default.jpg'),
+  # Created from https://purl.stanford.edu/bc151bq1744
+  TestCase.new('bc151bq1744_00_0001.jp2', 'info.json'),
+  TestCase.new('bc151bq1744_00_0001.jp2', 'full/655,/0/default.jpg'),
+  TestCase.new('bc151bq1744_00_0001.jp2', '0,0,4096,4096/1024,/0/default.jpg'),
+  TestCase.new('bc151bq1744_00_0001.jp2', '0,4096,4096,2961/1024,/0/default.jpg'),
+  TestCase.new('bc151bq1744_00_0001.jp2', '4096,0,1144,4096/286,/0/default.jpg'),
+  TestCase.new('bc151bq1744_00_0001.jp2', '4096,4096,1144,2961/286,/0/default.jpg'),
+  TestCase.new('bc151bq1744_00_0001.jp2', '2048,2048,2048,2048/1024,/0/default.jpg'),
+  TestCase.new('bc151bq1744_00_0001.jp2', '2048,4096,2048,2048/1024,/0/default.jpg'),
+  TestCase.new('bc151bq1744_00_0001.jp2', '0,2048,2048,2048/1024,/0/default.jpg'),
+  TestCase.new('bc151bq1744_00_0001.jp2', '4096,2048,1144,2048/572,/0/default.jpg'),
+  TestCase.new('bc151bq1744_00_0001.jp2', '0,4096,2048,2048/1024,/0/default.jpg'),
+  TestCase.new('bc151bq1744_00_0001.jp2', '4096,4096,1144,2048/572,/0/default.jpg'),
+]
+
+class RiiifDriver
+  def self.url_for(test_case)
+    "http://localhost:3001/image-service/#{test_case.image.delete_suffix('.jp2')}/#{test_case.path}"
+  end
+end
+
+class CantaloupeDriver
+  def self.url_for(test_case)
+    "http://localhost:8182/iiif/3/#{test_case.image}/#{test_case.path}"
+  end
+end
+
+class RizzDriver
+  def self.url_for(test_case)
+    "http://localhost:3000/image-server/#{test_case.image}/#{test_case.path}"
+  end
+end
+
+total_times = {}
+drivers = [RiiifDriver, CantaloupeDriver, RizzDriver]
+drivers.each do |driver|
+  tmp = "tmp/#{driver.to_s}"
+  FileUtils.rm_rf(tmp)
+  FileUtils.mkdir_p(tmp)
+  total_times[driver.to_s] = 0
+  test_cases.each do |test_case|
+    url = driver.url_for(test_case)
+    response = nil
+    t = Benchmark.realtime do
+      response = Faraday.get(url)
+    end
+    puts "#{driver.to_s} #{url} - #{response.status} - #{t}"
+    total_times[driver.to_s] += t
+    raise unless response.success?
+    File.write("#{tmp}/#{test_case.path.gsub('/', '-')}", response.body)
+  end
+end
+
+drivers.each do |driver|
+  puts "#{driver.to_s} total time: #{total_times[driver.to_s]}"
+end
