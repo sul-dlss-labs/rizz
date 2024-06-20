@@ -7,4 +7,4 @@ COPY Gemfile .
 RUN bundle install
 
 WORKDIR /rizz
-CMD bundle install && bundle exec bin/puma -C config/puma.rb config.ru
+CMD bundle install && bundle exec puma -C config/puma.rb config.ru
