@@ -13,8 +13,8 @@ task :benchmark,
       report_sum = nil
       args[:runs].to_i.times do |index|
         report = bm.report("Run #{index + 1}") do
-          vips_source = VipsSourceResolvers::BasicFilename.resolve(image_request:, images_path:)
-          ImageService.call(image_request:, vips_source:)
+          filepath = FileResolvers::BasicFilename.resolve(identifier: image_request.identifier, images_path:)
+          ImageService.call(filepath:, image_request:)
         end
         report_sum = report_sum ? report_sum + report : report
       end

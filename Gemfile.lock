@@ -130,6 +130,10 @@ GEM
     drb (2.2.1)
     ed25519 (1.3.0)
     erubi (1.13.0)
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-net_http (3.1.0)
+      net-http
     ffi (1.17.0-aarch64-linux-gnu)
     ffi (1.17.0-arm-linux-gnu)
     ffi (1.17.0-arm64-darwin)
@@ -166,6 +170,8 @@ GEM
     minitest (5.23.1)
     msgpack (1.7.2)
     mutex_m (0.2.0)
+    net-http (0.4.1)
+      uri
     net-imap (0.4.12)
       date
       net-protocol
@@ -320,6 +326,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
+    uri (0.13.0)
     vips (8.15.1)
       ffi (~> 1.12)
     web-console (4.2.1)
@@ -348,6 +355,7 @@ DEPENDENCIES
   config
   debug
   dlss-capistrano
+  faraday
   image_processing
   jbuilder
   propshaft

@@ -41,7 +41,6 @@ gem 'config'
 gem 'image_processing'
 gem 'puma'
 gem 'rack-cors'
-gem 'tzinfo-data'
 gem 'vips'
 
 group :development, :test do

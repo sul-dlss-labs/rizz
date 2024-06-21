@@ -59,8 +59,20 @@ class RizzDriver
   end
 end
 
+class RizzTiffDriver
+    def self.url_for(test_case)
+      "http://localhost:3002/image-server/#{test_case.image.gsub(/jp2$/, 'tif')}/#{test_case.path}"
+    end
+end
+
+class RizzJphDriver
+    def self.url_for(test_case)
+      "http://localhost:3002/image-server/#{test_case.image.gsub(/jp2$/, 'jph')}/#{test_case.path}"
+    end
+end
+
 total_times = {}
-drivers = [RiiifDriver, CantaloupeDriver, RizzDriver]
+drivers = [RizzDriver, RizzTiffDriver, RizzJphDriver, RiiifDriver, CantaloupeDriver]
 drivers.each do |driver|
   tmp = "tmp/#{driver.to_s}"
   FileUtils.rm_rf(tmp)
