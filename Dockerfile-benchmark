@@ -1,0 +1,14 @@
+FROM sul-dlss/kakadu-vips:latest
+
+USER root
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install tzdata
+
+USER ruby
+ENV RAILS_ENV=production
+COPY --chown=ruby . .
+COPY images/ /images/
+
+RUN bundle install
+
+EXPOSE 3000
+CMD ["./bin/rails", "server"]

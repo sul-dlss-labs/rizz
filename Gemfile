@@ -41,6 +41,7 @@ gem 'config'
 gem 'image_processing'
 gem 'puma'
 gem 'rack-cors'
+gem 'tzinfo-data'
 gem 'vips'
 
 group :development, :test do
@@ -55,6 +56,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'faraday'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
 
