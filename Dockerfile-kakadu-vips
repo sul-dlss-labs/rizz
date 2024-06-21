@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:jammy
 
 ARG KDU_VERSION=v8_3-02138L
 ARG KAKADU_ARCH=Linux-arm-64-gcc
