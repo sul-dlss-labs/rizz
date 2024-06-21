@@ -2,6 +2,8 @@
 
 # Controller for image transformations.
 class ImagesController < ApplicationController
+  include ActionController::Live
+
   rescue_from ImageService::InvalidRequestError do |e|
     render status: :bad_request, plain: e.message || 'Invalid request'
   end
@@ -17,8 +19,15 @@ class ImagesController < ApplicationController
       return send_file cache_filepath, type: request.format, disposition: 'inline'
     end
 
-    image_response = ImageService.call(filepath:, image_request:)
-    send_data image_response.buffer, type: image_response.mime_type, disposition: 'inline'
+    begin
+      image_response = ImageService.call(filepath:, image_request:)
+      response.headers['Content-Type'] = image_response.mime_type
+      response.headers['Content-Disposition'] = 'inline'
+      image_response.write_to(response.stream)
+    ensure
+      response.stream.close
+    end
+    # send_data image_response.buffer, type: image_response.mime_type, disposition: 'inline'
     cache.write(request:, body: image_response.buffer)
   end
   # rubocop:enable Metrics/AbcSize

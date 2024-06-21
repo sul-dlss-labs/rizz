@@ -14,8 +14,8 @@ class VipsBufferWriter
 
   # @return [ImageResponse]
   def call
-    buffer = pdf? ? pdf_buffer : image.write_to_buffer(writer_params)
-    ImageResponse.new(buffer:, mime_type:)
+    # buffer = pdf? ? pdf_buffer : image.write_to_buffer(writer_params)
+    ImageResponse.new(mime_type:, image:, writer_params: writer_params)
   end
 
   attr_reader :image, :format
